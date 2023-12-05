@@ -15,11 +15,13 @@ matplotlib = "^3.8.2"
 pyarrow = "^14.0.1"
 jupyter = "^1.0.0"
 wget = "^3.2"
+ipython = "^8.18.1"
+ipykernel = "^6.27.1"
 
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"
-ruff = "^0.0.284"
+ruff = "^0.1.7"
 pytest = "^7.4.0"
 pre-commit = "^3.3.3"
 nbqa = "^1.7.0"
