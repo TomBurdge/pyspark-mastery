@@ -7,9 +7,7 @@ import pyspark.sql.types as T
 
 spark = SparkSession.builder.getOrCreate()
 
-sample_frame = spark.read.csv(
-    "data/sample_frame.csv", inferSchema=True, header=True
-)
+sample_frame = spark.read.csv("data/sample_frame.csv", inferSchema=True, header=True)
 
 sample_frame.show()
 
@@ -19,7 +17,7 @@ sample_frame.printSchema()
 
 
 # %%
-import pyspark.sql.functions as F
+import pyspark.sql.functions as F  # noqa
 
 fruits = [
     ["Apple", "Pomme", "яблоко"],
@@ -41,36 +39,29 @@ df = df.withColumn(
     "altogether", F.concat(F.col("English"), F.col("French"), F.col("Russian"))
 )
 
-df = df.withColumn(
-    "binary_encoded", F.encode(F.col("altogether"), "UTF-8")
-)
+df = df.withColumn("binary_encoded", F.encode(F.col("altogether"), "UTF-8"))
 
 df.select("altogether", "binary_encoded").show(10, False)
 
 
 # %%
-df.withColumn(
-    "binary_encoded", F.encode(F.col("altogether"), "UTF-8")
-).withColumn(
+df.withColumn("binary_encoded", F.encode(F.col("altogether"), "UTF-8")).withColumn(
     "length_string", F.length(F.col("altogether"))
-).withColumn(
-    "length_binary", F.length(F.col("binary_encoded"))
-).select(
+).withColumn("length_binary", F.length(F.col("binary_encoded"))).select(
     "altogether", "binary_encoded", "length_string", "length_binary"
 ).show()
 
 
 # %%
-short_values = [
-    [404, 1926],
-    [530, 2047]
-]
+short_values = [[404, 1926], [530, 2047]]
 columns = ["columnA", "columnB"]
 
 short_df = spark.createDataFrame(short_values, columns)
 
 short_df = short_df.select(
-    *[F.col(column).cast(T.ShortType()) for column in columns]   # casting to short 'cause long by default (it's Python)
+    *[
+        F.col(column).cast(T.ShortType()) for column in columns
+    ]  # casting to short 'cause long by default (it's Python)
 )
 
 short_df.printSchema()
@@ -91,7 +82,7 @@ short_df.show()
 
 # %%
 df_numerical = spark.createDataFrame(
-    [[2 ** 16, 2 ** 33, 2 ** 65]],
+    [[2**16, 2**33, 2**65]],
     schema=["sixteen", "thirty-three", "sixty-five"],
 )
 
@@ -103,7 +94,7 @@ df_numerical.show()
 
 
 # %%
-df_short = spark.createDataFrame([[2 ** 15]], schema=["my_read_value"])
+df_short = spark.createDataFrame([[2**15]], schema=["my_read_value"])
 
 df_short = df_short.withColumn(
     "my_short_value", F.col("my_read_value").cast(T.ShortType())
@@ -130,7 +121,7 @@ floats.withColumn(
 
 # %%
 integer_values = spark.createDataFrame(
-    [[0], [1024], [2 ** 17 + 14]], ["timestamp_as_long"]
+    [[0], [1024], [2**17 + 14]], ["timestamp_as_long"]
 )
 
 for ts in ["UTC", "America/Toronto", "Europe/Warsaw"]:
@@ -182,7 +173,7 @@ this_will_fail_to_parse.show()  # just nulls
 
 
 # %%
-import datetime as d
+import datetime as d  # noqa
 
 some_timestamps = (
     spark.createDataFrame(
@@ -212,17 +203,13 @@ some_timestamps.show()
 
 
 # %%
-some_nulls = spark.createDataFrame(
-    [[1], [2], [3], [4], [None], [6]], ["values"]
-)
+some_nulls = spark.createDataFrame([[1], [2], [3], [4], [None], [6]], ["values"])
 
 some_nulls.groupBy("values").count().show()
 
 
 # %%
-some_nulls.where(F.col("values").isNotNull()).groupBy(
-    "values"
-).count().show()
+some_nulls.where(F.col("values").isNotNull()).groupBy("values").count().show()
 
 
 # %%
@@ -253,9 +240,7 @@ pokedex.show(5)
 pokedex = (
     pokedex.withColumn(
         "type2",
-        F.when(F.isnull(F.col("type2")), F.col("type1")).otherwise(
-            F.col("type2")
-        ),
+        F.when(F.isnull(F.col("type2")), F.col("type1")).otherwise(F.col("type2")),
     )
     .withColumn("type", F.array(F.col("type1"), F.col("type2")))
     .select("number", "name", "type")
@@ -267,13 +252,11 @@ pokedex.show(5)
 # %%
 pokedex.withColumn("type", F.array_sort(F.col("type"))).withColumn(
     "type", F.array_distinct(F.col("type"))
-).where(
-    F.size(F.col("type")) > 1
-).groupby(
-    "type"
-).count().orderBy(
+).where(F.size(F.col("type")) > 1).groupby("type").count().orderBy(
     "count", ascending=False
-).show(10)
+).show(
+    10
+)
 
 
 # %%
@@ -302,9 +285,7 @@ rps_df.printSchema()
 
 
 # %%
-rps_df.select(
-    F.col("choice"), F.col("result")["rock"], F.col("result.rock")
-).show()
+rps_df.select(F.col("choice"), F.col("result")["rock"], F.col("result.rock")).show()
 
 
 # %%
@@ -322,9 +303,7 @@ pokedex_schema = T.StructType(
     ]
 )
 
-pokedex = spark.read.csv(
-    "data/pokedex.dsv", sep="\t", schema=pokedex_schema
-)
+pokedex = spark.read.csv("data/pokedex.dsv", sep="\t", schema=pokedex_schema)
 
 pokedex.printSchema()
 
@@ -357,8 +336,8 @@ pokedex = spark.read.csv("data/pokedex.dsv", sep="\t").toDF(
 transformations = [
     F.col("name").alias("pokemon_name"),
     F.when(F.col("type1").isin(["Fire", "Water", "Grass"]), True)
-        .otherwise(False)
-        .alias("starter_type"),
+    .otherwise(False)
+    .alias("starter_type"),
 ]
 
 transformations
@@ -414,15 +393,13 @@ cast_df.show(3, False)
 
 # %%
 cast_df = cast_df.select(
-    F.col("number_with_decimal")
-        .cast(T.DoubleType())
-        .alias("number_with_decimal"),
+    F.col("number_with_decimal").cast(T.DoubleType()).alias("number_with_decimal"),
     F.col("dates_inconsistently_formatted")
-        .cast(T.DateType())
-        .alias("dates_inconsistently_formatted"),
+    .cast(T.DateType())
+    .alias("dates_inconsistently_formatted"),
     F.col("integer_with_separators")
-        .cast(T.LongType())
-        .alias("integer_with_separators"),
+    .cast(T.LongType())
+    .alias("integer_with_separators"),
 )
 
 cast_df.show(3, False)
@@ -439,17 +416,13 @@ clean_me = spark.createDataFrame(
     data, T.StructType([T.StructField("values", T.StringType())])
 )
 
-clean_me = clean_me.withColumn(
-    "values_cleaned", F.col("values").cast(T.IntegerType())
-)
+clean_me = clean_me.withColumn("values_cleaned", F.col("values").cast(T.IntegerType()))
 
 clean_me.drop_duplicates().show(10)
 
 
 # %%
-clean_me = clean_me.withColumn(
-    "values", F.split(F.col("values"), "_")[0]
-)
+clean_me = clean_me.withColumn("values", F.split(F.col("values"), "_")[0])
 
 
 # %%
@@ -466,5 +439,3 @@ cast_df.fillna(-1, ["number_with_decimal"]).fillna(-3).show()
 
 # %%
 cast_df.fillna({"number_with_decimal": -1, "integer_with_separators": -3}).show()
-
-

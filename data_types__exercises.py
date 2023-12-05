@@ -18,13 +18,17 @@ some_timestamps.printSchema()
 
 
 # %%
-some_timestamps = some_timestamps.withColumn("as_date", F.col("as_string").cast(T.DateType()))
+some_timestamps = some_timestamps.withColumn(
+    "as_date", F.col("as_string").cast(T.DateType())
+)
 
 some_timestamps.printSchema()
 
 
 # %%
-some_timestamps = some_timestamps.withColumn("as_timestamp", F.col("as_date").cast(T.TimestampType()))
+some_timestamps = some_timestamps.withColumn(
+    "as_timestamp", F.col("as_date").cast(T.TimestampType())
+)
 
 some_timestamps.printSchema()
 
@@ -55,15 +59,13 @@ cast_df.show(3, False)
 
 # %%
 cast_df = cast_df.select(
-    F.col("number_with_decimal")
-        .cast(T.DoubleType())
-        .alias("number_with_decimal"),
+    F.col("number_with_decimal").cast(T.DoubleType()).alias("number_with_decimal"),
     F.col("dates_inconsistently_formatted")
-        .cast(T.DateType())
-        .alias("dates_inconsistently_formatted"),
+    .cast(T.DateType())
+    .alias("dates_inconsistently_formatted"),
     F.col("integer_with_separators")
-        .cast(T.LongType())
-        .alias("integer_with_separators"),
+    .cast(T.LongType())
+    .alias("integer_with_separators"),
 )
 
 cast_df.show(3, False)
@@ -74,14 +76,13 @@ cast_df.fillna("2020, 1, 1", ["dates_inconsistently_formatted"]).show()
 
 
 # %%
-from datetime import date as d
+from datetime import date as d  # noqa
 
 cast_df = cast_df.withColumn(
     "dates_inconsistently_formatted",
-    F.when(F.isnull(F.col("dates_inconsistently_formatted")), d(2020, 1, 1))
-        .otherwise(F.col("dates_inconsistently_formatted"))
+    F.when(F.isnull(F.col("dates_inconsistently_formatted")), d(2020, 1, 1)).otherwise(
+        F.col("dates_inconsistently_formatted")
+    ),
 )
 
 cast_df.show()
-
-
