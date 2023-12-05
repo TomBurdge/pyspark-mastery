@@ -1,3 +1,19 @@
+PySpark is a very important API for data engineering.
+
+I am reading the book **Data Analysis with Python and PySpark** by Jonathan Rioux, it's really good.
+
+I'm also doing the practice exercises, which I will add to this fork.
+I am not planing to complete Part 3 of the book (chapters 12 - 14).
+
+PySpark is very important for data engineering, as part of both my professional and open source work.
+
+I am already enjoying learning the intricacies of some of the API 
+(and some of the peculiarities, such as why there is a mix of camel and snake_case in the API; it's because of the relation to Java/Scala.)
+
+
+# From forked repo:
+(I didn't like their dependency management, so I changed it)
+
 Learning Pyspark locally (i.e. without using any cloud service) via following the excellent [Data Analysis with Python and PySpark](https://www.manning.com/books/data-analysis-with-python-and-pyspark) by Jonathan Rioux.
 
 ## Environment setup
