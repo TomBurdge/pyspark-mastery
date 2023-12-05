@@ -2,7 +2,7 @@ GLOBAL_PYTHON = $(shell which python3)
 LOCAL_PYTHON = ./.venv/bin/python
 LOCAL_PRE_COMMIT = ./.venv/lib/python*/site-packages/pre_commit
 
-setup: venv install make_local
+setup: venv install make_local pre-commit
 
 venv: $(GLOBAL_PYTHON)
 	@echo "Creating .venv..."
