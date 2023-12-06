@@ -1,6 +1,6 @@
 PySpark is a very important API for data engineering.
 
-I am reading the book **Data Analysis with Python and PySpark** by Jonathan Rioux, it's really good.
+I am reading the book **Data Analysis with Python and PySpark** by Jonathan Rioux.
 
 I'm also doing the practice exercises, which I will add to this fork.
 I am not planing to complete Part 3 of the book (chapters 12 - 14).
