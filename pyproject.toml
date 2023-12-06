@@ -17,6 +17,7 @@ wget = "^3.2"
 ipython = "^8.18.1"
 ipykernel = "^6.27.1"
 requests = "^2.31.0"
+polars = "^0.19.19"
 
 
 [tool.poetry.group.dev.dependencies]
