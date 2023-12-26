@@ -278,3 +278,4 @@ debug.log
 .DS_Store
 poetry.lock
 data/Ch07/*
+data/Ch09/*
